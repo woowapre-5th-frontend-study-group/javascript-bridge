@@ -59,45 +59,6 @@ class Bridge {
       ...comparedResult,
       isRetry: true,
     };
-
-    // // < 0 : comparedBridge가 더 긺
-    // // = 0 : 둘 다 똑같음
-    // // > 0 : #bridgeDAta가 더 긺
-    // const whichMoreLength = this.#bridgeData.length - comparedBridgeData.length;
-
-    // const compareResult = {
-    //   isClear: false,
-    //   failMoving: null,
-    // };
-
-    // if (whichMoreLength === 0) {
-    //   const isAllSameMoving = this.#bridgeData.every(
-    //     (moving, index) => moving === comparedBridgeData[index]
-    //   );
-
-    //   compareResult.isClear = isAllSameMoving;
-    //   compareResult.failMoving = isAllSameMoving ? null :
-    // }
-
-    // if (whichMoreLength < 0) {
-    //   const isAllSameMoving = this.#bridgeData.every(
-    //     (moving, index) => moving === comparedBridgeData[index]
-    //   );
-
-    //   compareResult.isClear = false;
-    //   compareResult.canNext = isAllSameMoving;
-    // }
-
-    // if (whichMoreLength > 0) {
-    //   const isAllSameMoving = comparedBridgeData.every(
-    //     (moving, index) => moving === this.#bridgeData[index]
-    //   );
-
-    //   compareResult.isClear = false;
-    //   compareResult.canNext = isAllSameMoving;
-    // }
-
-    // return compareResult;
   }
 
   markWrongMoving() {

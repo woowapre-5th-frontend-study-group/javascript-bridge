@@ -20,26 +20,45 @@ class BridgeGame {
     _attemptCount += 1;
   }
 
-  // TODO: 테스트용 getter, 나중에 지우기
-  getUserBridge() {
-    return this.#userBridge;
-  }
-
   static setBridgeSize(bridgeSize) {
     _bridgeSize = bridgeSize;
+  }
+
+  getAttemptCount() {
+    return _attemptCount;
   }
 
   getComparedMap() {
     const comparedResult = this.#userBridge.compareBridge(_answerBridge);
 
     if (comparedResult.isRetry) {
+      // 맨 마지막 moving만 X로 체크
+      const userBridgeData = this.#userBridge.getBridgeData();
+      const movingData = userBridgeData.map((moving) => {
+        return { moving, fail: false };
+      });
+
+      return [
+        ...movingData.slice(0, -1),
+        { moving: movingData.slice(-1)[0].moving, fail: true },
+      ];
     }
 
-    return _answerBridge;
-  }
+    if (comparedResult.isClear) {
+      // 정답 다리 데이터 출력
+      const answerBridgeData = _answerBridge.getBridgeData();
+      return answerBridgeData.map((moving) => {
+        return { moving, fail: false };
+      });
+    }
 
-  IsClear() {
-    return this.#isClear;
+    // 현재 유저 데이터 출력
+    const userBridgeData = this.#userBridge.getBridgeData();
+    return userBridgeData.map((moving) => {
+      return { moving, fail: false };
+    });
+
+    // return _answerBridge;
   }
 
   static createAnswerBridge() {

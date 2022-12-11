@@ -39,7 +39,7 @@ const BridgeGameController = {
   },
 
   continue() {
-    const isClear = _bridgeGameInstance.IsClear();
+    const isClear = _bridgeGameInstance.clear();
     if (isClear) {
       BridgeGameController.end();
       return;
@@ -65,6 +65,8 @@ const BridgeGameController = {
       return;
     }
 
+    OutputView.addNewLine();
+
     if (gameCommand === 'R') {
       BridgeGameController.start();
       return;
@@ -75,7 +77,7 @@ const BridgeGameController = {
 
   end() {
     if (_changeListener) {
-      _changeListener();
+      _changeListener(_bridgeGameInstance);
     }
   },
 };
