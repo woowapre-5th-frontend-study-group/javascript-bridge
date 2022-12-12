@@ -62,6 +62,7 @@ class GameManager {
 
   handleGameCommand(gameCommand) {
     if (gameCommand === 'R') return this.retry();
+    return this.end();
   }
 
   retry() {
