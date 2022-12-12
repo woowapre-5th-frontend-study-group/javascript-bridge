@@ -10,9 +10,9 @@ class BasicController {
 
   start() {}
 
-  end() {
+  end(param = null) {
     if (this.#changeLisener) {
-      this.#changeLisener();
+      this.#changeLisener(param);
     }
   }
 }

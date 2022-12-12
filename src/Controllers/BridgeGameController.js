@@ -4,13 +4,13 @@ const BridgeGame = require('../Models/BridgeGame');
 /** Views Imported */
 const { InputView, OutputView } = require('../Views');
 
+/** Controllers Imported */
+const BasicController = require('./BasicController');
+
 /** Utils Imported */
 const ExceptionHandler = require('../Utils/ExceptionHandler');
 
 /* #region Private Variable for encapsulation */
-/** @type {function} */
-let _changeListener = null;
-
 /** @type {BridgeGame} */
 let _bridgeGameInstance = null;
 /* #endregion */
@@ -21,19 +21,19 @@ function makeCheckCondition(checkResult, callback) {
 }
 /* #endregion */
 
-const BridgeGameController = {
-  subscribe(callbackFunction) {
-    _changeListener = callbackFunction;
-  },
+class BridgeGameController extends BasicController {
+  constructor() {
+    super();
+  }
 
   start() {
     _bridgeGameInstance = new BridgeGame();
     this.questionMoving();
-  },
+  }
 
   questionMoving() {
     InputView.readMoving((moving) => this.readMovingCallback(moving));
-  },
+  }
 
   readMovingCallback(moving) {
     const validateResult = ExceptionHandler.tryValidateMoving(moving);
@@ -46,11 +46,11 @@ const BridgeGameController = {
     OutputView.printMap(_bridgeGameInstance);
 
     this.continue();
-  },
+  }
 
   continue() {
     const conditionList = [
-      makeCheckCondition(_bridgeGameInstance.clear(), () => this.end()),
+      makeCheckCondition(_bridgeGameInstance.clear(), () => this.end(_bridgeGameInstance)), // prettier-ignore
       makeCheckCondition(_bridgeGameInstance.retry(), () => this.questionGameCommand()), // prettier-ignore
     ];
 
@@ -61,11 +61,11 @@ const BridgeGameController = {
     }
 
     this.questionMoving();
-  },
+  }
 
   questionGameCommand() {
     InputView.readGameCommand((gameCommand) => this.readGameCommandCallback(gameCommand)); // prettier-ignore
-  },
+  }
 
   readGameCommandCallback(gameCommand) {
     OutputView.addNewLine();
@@ -81,14 +81,8 @@ const BridgeGameController = {
       return;
     }
 
-    this.end();
-  },
-
-  end() {
-    if (_changeListener) {
-      _changeListener(_bridgeGameInstance);
-    }
-  },
-};
+    super.end(_bridgeGameInstance);
+  }
+}
 
 module.exports = BridgeGameController;

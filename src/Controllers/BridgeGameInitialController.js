@@ -2,24 +2,23 @@ const BridgeGame = require('../Models/BridgeGame');
 
 const { InputView, OutputView } = require('../Views');
 
+const BasicController = require('./BasicController');
+
 const ExceptionHandler = require('../Utils/ExceptionHandler');
 const { convertToNumber } = require('../Utils/Helper');
-
-let _changeListener = null;
-
-const BridgeGameInitialController = {
-  subscribe(callbackFunction) {
-    _changeListener = callbackFunction;
-  },
+class BridgeGameInitialController extends BasicController {
+  constructor() {
+    super();
+  }
 
   start() {
     OutputView.printWelcomeMessage();
     this.questionBridgeSize();
-  },
+  }
 
   questionBridgeSize() {
     InputView.readBridgeSize((bridgeSize) => this.readBridgeSizeCallback(bridgeSize)); // prettier-ignore
-  },
+  }
 
   readBridgeSizeCallback(bridgeSize) {
     OutputView.addNewLine();
@@ -34,18 +33,12 @@ const BridgeGameInitialController = {
     BridgeGame.setBridgeSize(convertedBridgeSize);
 
     this.createAnswerBridge(convertedBridgeSize);
-  },
+  }
 
   createAnswerBridge(bridgeSize) {
     BridgeGame.createAnswerBridge(bridgeSize);
     this.end();
-  },
-
-  end() {
-    if (_changeListener) {
-      _changeListener();
-    }
-  },
-};
+  }
+}
 
 module.exports = BridgeGameInitialController;

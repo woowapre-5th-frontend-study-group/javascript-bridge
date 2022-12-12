@@ -7,16 +7,26 @@ const {
 } = require('./Controllers');
 
 class App {
-  play() {
-    BridgeGameInitialController.subscribe(() => BridgeGameController.start());
-    BridgeGameController.subscribe((gameInstance) => BridgeGameResultController.start(gameInstance)); // prettier-ignore
-    BridgeGameResultController.subscribe(() => this.endService());
+  #bridgeGameInitialController;
+  #bridgeGameController;
+  #bridgeGameResultController;
 
+  constructor() {
+    this.#bridgeGameInitialController = new BridgeGameInitialController();
+    this.#bridgeGameController = new BridgeGameController();
+    this.#bridgeGameResultController = new BridgeGameResultController();
+
+    this.#bridgeGameInitialController.subscribe(() => this.#bridgeGameController.start()); // prettier-ignore
+    this.#bridgeGameController.subscribe((gameInstance) =>this.#bridgeGameResultController.start(gameInstance)); // prettier-ignore
+    this.#bridgeGameResultController.subscribe(() => this.endService());
+  }
+
+  play() {
     this.startService();
   }
 
   startService() {
-    BridgeGameInitialController.start();
+    this.#bridgeGameInitialController.start();
   }
 
   endService() {
