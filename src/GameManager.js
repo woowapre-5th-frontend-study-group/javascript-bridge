@@ -49,12 +49,20 @@ class GameManager {
     const isFail = this.#bridgeGame.isFail();
 
     if (isSuccess) return this.end();
-    if (isFail) return this.requestRetry();
+    if (isFail) return this.requestGameCommand();
 
     this.requestMoving();
   }
 
-  requestRetry() {}
+  requestGameCommand() {
+    InputView.readGameCommand((gameCommand) =>
+      this.handleGameCommand(gameCommand)
+    );
+  }
+
+  handleGameCommand(gameCommand) {
+    console.log(`무엇을 눌렀을까요? ${gameCommand}`);
+  }
 
   end() {
     const finalResult = this.#bridgeGame.getFinalResult(this.#bridge.getSize());
