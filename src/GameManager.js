@@ -1,6 +1,13 @@
-const { InputView, OutputView } = require('./View/IOView');
+const Bridge = require('./models/Bridge');
+const BridgeGame = require('./models/BridgeGame');
+const { InputView, OutputView } = require('./views/IOView');
+const { makeBridge } = require('./BridgeMaker');
+const { generate } = require('./BridgeRandomNumberGenerator');
 
 class GameManager {
+  #bridge;
+  #bridgeGame = new BridgeGame();
+
   start() {
     OutputView.printStartMessage();
 
@@ -12,7 +19,7 @@ class GameManager {
   }
 
   handleBridgeSize(bridegSize) {
-    console.log(`다리의 길이는 ${bridegSize}입니다.`);
+    this.#bridge = new Bridge(bridegSize);
   }
 }
 

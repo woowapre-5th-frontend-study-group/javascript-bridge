@@ -1,5 +1,4 @@
 const GameManager = require('./GameManager');
-const InputView = require('./View/InputView');
 
 class App {
   #gameManager = new GameManager();
