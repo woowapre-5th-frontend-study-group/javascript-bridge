@@ -10,11 +10,6 @@ const BasicController = require('./BasicController');
 /** Utils Imported */
 const ExceptionHandler = require('../Utils/ExceptionHandler');
 
-/* #region Private Variable for encapsulation */
-/** @type {BridgeGame} */
-let _bridgeGameInstance = null;
-/* #endregion */
-
 /* #region  Private Functions */
 function makeCheckCondition(checkResult, callback) {
   return { checkResult, callback };
@@ -22,12 +17,15 @@ function makeCheckCondition(checkResult, callback) {
 /* #endregion */
 
 class BridgeGameController extends BasicController {
+  /** @type {BridgeGame} */
+  #bridgeGameInstance = null;
+
   constructor() {
     super();
   }
 
   start() {
-    _bridgeGameInstance = new BridgeGame();
+    this.#bridgeGameInstance = new BridgeGame();
     this.questionMoving();
   }
 
@@ -42,16 +40,16 @@ class BridgeGameController extends BasicController {
       return;
     }
 
-    _bridgeGameInstance.move(moving);
-    OutputView.printMap(_bridgeGameInstance);
+    this.#bridgeGameInstance.move(moving);
+    OutputView.printMap(this.#bridgeGameInstance);
 
-    this.continue();
+    this.continueByEachCondition();
   }
 
-  continue() {
+  continueByEachCondition() {
     const conditionList = [
-      makeCheckCondition(_bridgeGameInstance.clear(), () => this.end(_bridgeGameInstance)), // prettier-ignore
-      makeCheckCondition(_bridgeGameInstance.retry(), () => this.questionGameCommand()), // prettier-ignore
+      makeCheckCondition(this.#bridgeGameInstance.clear(), () => this.end(this.#bridgeGameInstance)), // prettier-ignore
+      makeCheckCondition(this.#bridgeGameInstance.retry(), () => this.questionGameCommand()), // prettier-ignore
     ];
 
     const conditionResult = conditionList.filter(({ checkResult }) => checkResult); // prettier-ignore
@@ -81,7 +79,7 @@ class BridgeGameController extends BasicController {
       return;
     }
 
-    super.end(_bridgeGameInstance);
+    super.end(this.#bridgeGameInstance);
   }
 }
 
