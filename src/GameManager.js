@@ -14,11 +14,15 @@ class GameManager {
     this.requestBridgeSize();
   }
 
-  requestBridgeSize() {
+  requestBridgeSize(error) {
+    if (error) {
+      console.log(error);
+    }
     InputView.readBridgeSize((bridegSize) => this.handleBridgeSize(bridegSize));
   }
 
   handleBridgeSize(bridegSize) {
+    Bridge.validationBridgeSize(bridegSize, () => this.requestBridgeSize());
     this.#bridge = new Bridge(bridegSize);
   }
 }
