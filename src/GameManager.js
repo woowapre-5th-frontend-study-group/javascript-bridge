@@ -1,9 +1,7 @@
 const Bridge = require('./models/Bridge');
 const BridgeGame = require('./models/BridgeGame');
-const { InputView, OutputView } = require('./views/IOView');
-const { makeBridge } = require('./BridgeMaker');
-const { generate } = require('./BridgeRandomNumberGenerator');
 const IOView = require('./views/IOView');
+const { InputView, OutputView } = require('./views/IOView');
 
 class GameManager {
   #bridge;
@@ -20,9 +18,10 @@ class GameManager {
   }
 
   handleBridgeSize(bridegSize) {
-    Bridge.validationBridgeSize(bridegSize, () => this.requestBridgeSize());
-    this.#bridge = new Bridge(bridegSize);
+    const isValid = Bridge.validationBridgeSize(bridegSize);
+    if (!isValid) return this.requestBridgeSize();
 
+    this.#bridge = new Bridge(bridegSize);
     this.requestMoving();
   }
 

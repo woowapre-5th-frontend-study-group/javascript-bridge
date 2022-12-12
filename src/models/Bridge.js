@@ -1,6 +1,7 @@
 const errorHandler = require('../libs/errorHandler');
 const { makeBridge } = require('../BridgeMaker');
 const { generate } = require('../BridgeRandomNumberGenerator');
+const { BridgeSizeValidator } = require('../libs/Validator');
 
 class Bridge {
   #bridge;
@@ -11,6 +12,7 @@ class Bridge {
 
   make(bridegSize) {
     this.#bridge = makeBridge(bridegSize, generate);
+    console.log(this.#bridge);
   }
 
   getSpecificLocation(location) {
@@ -21,14 +23,14 @@ class Bridge {
     return this.#bridge.length;
   }
 
-  static validationBridgeSize(bridegSize, callBack) {
+  static validationBridgeSize(bridegSize) {
     try {
-      if (bridegSize < 3) {
-        throw new Error('[ERROR] 에러 발생!');
-      }
+      BridgeSizeValidator.validation(bridegSize);
     } catch (error) {
-      errorHandler(error, callBack);
+      errorHandler(error);
+      return false;
     }
+    return true;
   }
 }
 
