@@ -36,6 +36,18 @@ class BridgeGame {
     });
   }
 
+  isEnd(bridegSize) {
+    if (bridegSize === this.#bridgeState.length) return true;
+    if (this.#calLastResult() === 'X') return true;
+
+    return false;
+  }
+
+  #calLastResult() {
+    const lastIndex = this.#bridgeState.length - 1;
+    return this.#bridgeState[lastIndex][1];
+  }
+
   /**
    * 사용자가 게임을 다시 시도할 때 사용하는 메서드
    * <p>

@@ -36,10 +36,20 @@ class GameManager {
     this.#bridgeGame.move(moving, compareLocation);
 
     this.printMovingResult();
+    this.actionAboutMoving();
   }
 
   printMovingResult() {
     OutputView.printMap(this.#bridgeGame.getMovingResult());
+  }
+
+  actionAboutMoving() {
+    const isEnd = this.#bridgeGame.isEnd(this.#bridge.getSize());
+    if (isEnd) {
+      return;
+    }
+
+    this.requestMoving();
   }
 }
 

@@ -18,6 +18,10 @@ class Bridge {
     return this.#bridge[location];
   }
 
+  getSize() {
+    return this.#bridge.length;
+  }
+
   static validationBridgeSize(bridegSize, callBack) {
     try {
       if (bridegSize < 3) {
