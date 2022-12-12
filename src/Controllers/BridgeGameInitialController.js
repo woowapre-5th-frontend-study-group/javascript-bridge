@@ -1,13 +1,9 @@
-const BridgeGameState = require('../Models/BridgeGameState');
 const BridgeGame = require('../Models/BridgeGame');
 
 const { InputView, OutputView } = require('../Views');
 
 const ExceptionHandler = require('../Utils/ExceptionHandler');
-const BridgeRandomNumberGenerator = require('../Utils/BridgeRandomNumberGenerator');
-const BridgeMaker = require('../Utils/BridgeMaker');
 const { convertToNumber } = require('../Utils/Helper');
-const Bridge = require('../Models/Bridge');
 
 let _changeListener = null;
 
@@ -18,40 +14,31 @@ const BridgeGameInitialController = {
 
   start() {
     OutputView.printWelcomeMessage();
-    BridgeGameInitialController.questionBridgeSize();
+    this.questionBridgeSize();
   },
 
   questionBridgeSize() {
-    InputView.readBridgeSize(
-      BridgeGameInitialController.readBridgeSizeCallback
-    );
+    InputView.readBridgeSize((bridgeSize) => this.readBridgeSizeCallback(bridgeSize)); // prettier-ignore
   },
 
   readBridgeSizeCallback(bridgeSize) {
+    OutputView.addNewLine();
+
     const validateResult = ExceptionHandler.tryValidateBridgeSize(bridgeSize);
     if (!validateResult) {
-      BridgeGameInitialController.questionBridgeSize();
+      this.questionBridgeSize();
       return;
     }
 
-    const convertedValue = convertToNumber(bridgeSize);
-    // BridgeGameState.setBridgeSize(convertedValue);
-    BridgeGame.setBridgeSize(convertedValue);
+    const convertedBridgeSize = convertToNumber(bridgeSize);
+    BridgeGame.setBridgeSize(convertedBridgeSize);
 
-    BridgeGameInitialController.createAnswerBridge();
+    this.createAnswerBridge(convertedBridgeSize);
   },
 
-  createAnswerBridge() {
-    const bridgeSize = BridgeGameState.getBridgeSize();
-    const bridgeData = BridgeMaker.makeBridge(
-      bridgeSize,
-      BridgeRandomNumberGenerator.generate
-    );
-
-    console.log('생성된 정답 다리:');
-    BridgeGame.createAnswerBridge();
-    // BridgeGameState.setAnswerBridge(new Bridge(bridgeData));
-    BridgeGameInitialController.end();
+  createAnswerBridge(bridgeSize) {
+    BridgeGame.createAnswerBridge(bridgeSize);
+    this.end();
   },
 
   end() {

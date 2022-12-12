@@ -13,12 +13,12 @@ const BridgeGameResultController = {
 
   start(bridgeGameInstance) {
     _bridgeGameInstance = bridgeGameInstance;
-    BridgeGameResultController.printGameFinalResult();
+    this.printGameFinalResult();
   },
 
   printGameFinalResult() {
     OutputView.printResult(_bridgeGameInstance);
-    BridgeGameResultController.end();
+    this.end();
   },
 
   end() {

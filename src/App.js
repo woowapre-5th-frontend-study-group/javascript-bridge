@@ -8,9 +8,9 @@ const {
 
 class App {
   play() {
-    BridgeGameInitialController.subscribe(BridgeGameController.start);
-    BridgeGameController.subscribe(BridgeGameResultController.start);
-    BridgeGameResultController.subscribe(this.endService);
+    BridgeGameInitialController.subscribe(() => BridgeGameController.start());
+    BridgeGameController.subscribe((gameInstance) => BridgeGameResultController.start(gameInstance)); // prettier-ignore
+    BridgeGameResultController.subscribe(() => this.endService());
 
     this.startService();
   }

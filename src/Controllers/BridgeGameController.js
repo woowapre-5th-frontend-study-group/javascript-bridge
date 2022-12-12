@@ -1,15 +1,25 @@
+/** Models Imported */
 const BridgeGame = require('../Models/BridgeGame');
-const BridgeGameState = require('../Models/BridgeGameState');
 
+/** Views Imported */
 const { InputView, OutputView } = require('../Views');
 
+/** Utils Imported */
 const ExceptionHandler = require('../Utils/ExceptionHandler');
 
+/* #region Private Variable for encapsulation */
 /** @type {function} */
 let _changeListener = null;
 
 /** @type {BridgeGame} */
 let _bridgeGameInstance = null;
+/* #endregion */
+
+/* #region  Private Functions */
+function makeCheckCondition(checkResult, callback) {
+  return { checkResult, callback };
+}
+/* #endregion */
 
 const BridgeGameController = {
   subscribe(callbackFunction) {
@@ -18,61 +28,60 @@ const BridgeGameController = {
 
   start() {
     _bridgeGameInstance = new BridgeGame();
-    BridgeGameController.questionMoving();
+    this.questionMoving();
   },
 
   questionMoving() {
-    InputView.readMoving(BridgeGameController.readMovingCallback);
+    InputView.readMoving((moving) => this.readMovingCallback(moving));
   },
 
   readMovingCallback(moving) {
     const validateResult = ExceptionHandler.tryValidateMoving(moving);
     if (!validateResult) {
-      BridgeGameController.questionMoving();
+      this.questionMoving();
       return;
     }
 
     _bridgeGameInstance.move(moving);
-
     OutputView.printMap(_bridgeGameInstance);
-    BridgeGameController.continue();
+
+    this.continue();
   },
 
   continue() {
-    const isClear = _bridgeGameInstance.clear();
-    if (isClear) {
-      BridgeGameController.end();
+    const conditionList = [
+      makeCheckCondition(_bridgeGameInstance.clear(), () => this.end()),
+      makeCheckCondition(_bridgeGameInstance.retry(), () => this.questionGameCommand()), // prettier-ignore
+    ];
+
+    const conditionResult = conditionList.filter(({ checkResult }) => checkResult); // prettier-ignore
+    if (conditionResult.length !== 0) {
+      conditionResult[0].callback();
       return;
     }
 
-    const isRetry = _bridgeGameInstance.retry();
-    if (isRetry) {
-      BridgeGameController.questionGameCommand();
-      return;
-    }
-
-    BridgeGameController.questionMoving();
+    this.questionMoving();
   },
 
   questionGameCommand() {
-    InputView.readGameCommand(BridgeGameController.readGameCommandCallback);
+    InputView.readGameCommand((gameCommand) => this.readGameCommandCallback(gameCommand)); // prettier-ignore
   },
 
   readGameCommandCallback(gameCommand) {
-    const validateResult = ExceptionHandler.tryValidateGameCommand(gameCommand);
-    if (!validateResult) {
-      BridgeGameController.questionGameCommand();
-      return;
-    }
-
     OutputView.addNewLine();
 
-    if (gameCommand === 'R') {
-      BridgeGameController.start();
+    const validateResult = ExceptionHandler.tryValidateGameCommand(gameCommand);
+    if (!validateResult) {
+      this.questionGameCommand();
       return;
     }
 
-    BridgeGameController.end();
+    if (gameCommand === 'R') {
+      this.start();
+      return;
+    }
+
+    this.end();
   },
 
   end() {
