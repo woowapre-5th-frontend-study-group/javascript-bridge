@@ -14,7 +14,7 @@ class GameManager {
     this.requestBridgeSize();
   }
 
-  requestBridgeSize(error) {
+  requestBridgeSize() {
     InputView.readBridgeSize((bridegSize) => this.handleBridgeSize(bridegSize));
   }
 
@@ -30,7 +30,16 @@ class GameManager {
   }
 
   handleMoving(moving) {
-    console.log(`${moving}으로 이동합니다.`);
+    const compareLocation = this.#bridge.getSpecificLocation(
+      this.#bridgeGame.getOrder()
+    );
+    this.#bridgeGame.move(moving, compareLocation);
+
+    this.printMovingResult();
+  }
+
+  printMovingResult() {
+    OutputView.printMap(this.#bridgeGame.getMovingResult());
   }
 }
 

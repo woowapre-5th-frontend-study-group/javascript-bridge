@@ -11,6 +11,11 @@ class Bridge {
 
   make(bridegSize) {
     this.#bridge = makeBridge(bridegSize, generate);
+    console.log(this.#bridge);
+  }
+
+  getSpecificLocation(location) {
+    return this.#bridge[location];
   }
 
   static validationBridgeSize(bridegSize, callBack) {
