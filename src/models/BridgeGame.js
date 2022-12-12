@@ -1,3 +1,6 @@
+const errorHandler = require('../libs/errorHandler');
+const { MovingValidator } = require('../libs/Validator');
+
 /**
  * 다리 건너기 게임을 관리하는 클래스
  */
@@ -75,6 +78,16 @@ class BridgeGame {
 
   getOrder() {
     return this.#bridgeState.length;
+  }
+
+  static validationMoving(moving) {
+    try {
+      MovingValidator.validation(moving);
+    } catch (error) {
+      errorHandler(error);
+      return false;
+    }
+    return true;
   }
 }
 

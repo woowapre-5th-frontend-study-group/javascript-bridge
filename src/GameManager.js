@@ -30,13 +30,19 @@ class GameManager {
   }
 
   handleMoving(moving) {
+    const isValid = BridgeGame.validationMoving(moving);
+    if (!isValid) return this.requestMoving();
+
+    this.movingBridge(moving);
+    this.printMovingResult();
+    this.actionAboutMoving();
+  }
+
+  movingBridge(moving) {
     const compareLocation = this.#bridge.getSpecificLocation(
       this.#bridgeGame.getOrder()
     );
     this.#bridgeGame.move(moving, compareLocation);
-
-    this.printMovingResult();
-    this.actionAboutMoving();
   }
 
   printMovingResult() {
