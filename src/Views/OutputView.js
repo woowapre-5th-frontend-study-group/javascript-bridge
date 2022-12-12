@@ -53,6 +53,15 @@ const OutputView = {
     Console.print(`총 시도한 횟수: ${attempCount}`);
   },
 
+  /**
+   *
+   * @param {Error} errorObject
+   */
+  printError(errorObject) {
+    Console.print(`[ERROR] ${errorObject.message}`);
+    OutputView.addNewLine();
+  },
+
   addNewLine() {
     Console.print('');
   },
