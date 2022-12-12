@@ -3,6 +3,7 @@
  */
 class BridgeGame {
   #bridgeState = [];
+  #attemptCount = 1;
 
   /**
    * 사용자가 칸을 이동할 때 사용하는 메서드
@@ -36,16 +37,30 @@ class BridgeGame {
     });
   }
 
-  isEnd(bridegSize) {
-    if (bridegSize === this.#bridgeState.length) return true;
-    if (this.#calLastResult() === 'X') return true;
+  isSuccess(bridegSize) {
+    if (bridegSize !== this.#bridgeState.length) return false;
 
-    return false;
+    return this.#calLastResult() === 'O' ? true : false;
+  }
+
+  isFail() {
+    return this.#calLastResult() === 'X' ? true : false;
   }
 
   #calLastResult() {
     const lastIndex = this.#bridgeState.length - 1;
     return this.#bridgeState[lastIndex][1];
+  }
+
+  getFinalResult(bridegSize) {
+    const movingResult = this.getMovingResult();
+    const isSucces = this.isSuccess(bridegSize);
+
+    return {
+      movingResult,
+      attemptCount: this.#attemptCount,
+      isSucces,
+    };
   }
 
   /**

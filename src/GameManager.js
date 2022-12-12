@@ -3,6 +3,7 @@ const BridgeGame = require('./models/BridgeGame');
 const { InputView, OutputView } = require('./views/IOView');
 const { makeBridge } = require('./BridgeMaker');
 const { generate } = require('./BridgeRandomNumberGenerator');
+const IOView = require('./views/IOView');
 
 class GameManager {
   #bridge;
@@ -44,12 +45,21 @@ class GameManager {
   }
 
   actionAboutMoving() {
-    const isEnd = this.#bridgeGame.isEnd(this.#bridge.getSize());
-    if (isEnd) {
-      return;
-    }
+    const isSuccess = this.#bridgeGame.isSuccess(this.#bridge.getSize());
+    const isFail = this.#bridgeGame.isFail();
+
+    if (isSuccess) return this.end();
+    if (isFail) return this.requestRetry();
 
     this.requestMoving();
+  }
+
+  requestRetry() {}
+
+  end() {
+    const finalResult = this.#bridgeGame.getFinalResult(this.#bridge.getSize());
+    OutputView.printResult(finalResult);
+    IOView.exit();
   }
 }
 
