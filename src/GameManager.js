@@ -66,6 +66,9 @@ class GameManager {
   }
 
   handleGameCommand(gameCommand) {
+    const isValid = BridgeGame.validationGameCommand(gameCommand);
+    if (!isValid) return this.requestGameCommand();
+
     if (gameCommand === 'R') return this.retry();
     return this.end();
   }

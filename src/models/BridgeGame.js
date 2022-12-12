@@ -1,5 +1,5 @@
 const errorHandler = require('../libs/errorHandler');
-const { MovingValidator } = require('../libs/Validator');
+const { MovingValidator, GameCommandValidator } = require('../libs/Validator');
 
 /**
  * 다리 건너기 게임을 관리하는 클래스
@@ -83,6 +83,16 @@ class BridgeGame {
   static validationMoving(moving) {
     try {
       MovingValidator.validation(moving);
+    } catch (error) {
+      errorHandler(error);
+      return false;
+    }
+    return true;
+  }
+
+  static validationGameCommand(gameCommand) {
+    try {
+      GameCommandValidator.validation(gameCommand);
     } catch (error) {
       errorHandler(error);
       return false;
