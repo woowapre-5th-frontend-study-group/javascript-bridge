@@ -61,7 +61,12 @@ class GameManager {
   }
 
   handleGameCommand(gameCommand) {
-    console.log(`무엇을 눌렀을까요? ${gameCommand}`);
+    if (gameCommand === 'R') return this.retry();
+  }
+
+  retry() {
+    this.#bridgeGame.retry();
+    return this.requestMoving();
   }
 
   end() {
