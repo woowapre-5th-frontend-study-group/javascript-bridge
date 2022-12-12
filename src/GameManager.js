@@ -15,15 +15,22 @@ class GameManager {
   }
 
   requestBridgeSize(error) {
-    if (error) {
-      console.log(error);
-    }
     InputView.readBridgeSize((bridegSize) => this.handleBridgeSize(bridegSize));
   }
 
   handleBridgeSize(bridegSize) {
     Bridge.validationBridgeSize(bridegSize, () => this.requestBridgeSize());
     this.#bridge = new Bridge(bridegSize);
+
+    this.requestMoving();
+  }
+
+  requestMoving() {
+    InputView.readMoving((moving) => this.handleMoving(moving));
+  }
+
+  handleMoving(moving) {
+    console.log(`${moving}으로 이동합니다.`);
   }
 }
 

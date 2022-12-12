@@ -15,7 +15,9 @@ class Bridge {
 
   static validationBridgeSize(bridegSize, callBack) {
     try {
-      throw new Error('[ERROR] 에러 발생!');
+      if (bridegSize < 3) {
+        throw new Error('[ERROR] 에러 발생!');
+      }
     } catch (error) {
       errorHandler(error, callBack);
     }
