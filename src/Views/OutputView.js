@@ -1,13 +1,28 @@
 /** Models Imported */
 const BridgeGame = require('../Models/BridgeGame');
 
+const {
+  VALIDATOR,
+  SYMBOL,
+  OUTPUT_MESSAGE,
+  replaceParams,
+} = require('../Constants');
+
 /** Utils Imported */
 const { Console } = require('@woowacourse/mission-utils');
 
+/* #region Private Functions */
+/** @param {string} movings */
+function printMoving(movings) {
+  Console.print(
+    SYMBOL.BRACKET.OPEN + movings.join(SYMBOL.DELIMITER) + SYMBOL.BRACKET.CLOSE
+  );
+}
+/* #endregion */
+
 const OutputView = {
   printWelcomeMessage() {
-    Console.print('다리 건너기 게임을 시작합니다.');
-    OutputView.addNewLine();
+    Console.print(OUTPUT_MESSAGE.WELCOME);
   },
 
   /** @param {BridgeGame} bridgeGameInstance */
@@ -16,49 +31,60 @@ const OutputView = {
     const [lowerMovings, upperMovings] = [[], []];
 
     bridgeData.forEach((movingInfo) => {
-      if (movingInfo.moving === 'U') {
-        upperMovings.push(movingInfo.fail ? 'X' : 'O');
-        lowerMovings.push(' ');
+      if (movingInfo.moving === SYMBOL.MOVING.UP) {
+        upperMovings.push(movingInfo.fail ? SYMBOL.MARK.FAIL : SYMBOL.MARK.CLEAR); // prettier-ignore
+        lowerMovings.push(SYMBOL.MARK.NULL);
       }
 
-      if (movingInfo.moving === 'D') {
-        upperMovings.push(' ');
-        lowerMovings.push(movingInfo.fail ? 'X' : 'O');
+      if (movingInfo.moving === SYMBOL.MOVING.DOWN) {
+        upperMovings.push(SYMBOL.MARK.NULL);
+        lowerMovings.push(movingInfo.fail ? SYMBOL.MARK.FAIL : SYMBOL.MARK.CLEAR); // prettier-ignore
       }
     });
 
-    Console.print(`[ ${upperMovings.join(' | ')} ]`);
-    Console.print(`[ ${lowerMovings.join(' | ')} ]`);
+    printMoving(upperMovings);
+    printMoving(lowerMovings);
 
     OutputView.addNewLine();
   },
 
   /** @param {Bridge} printBridge */
   printBridgeData(printBridge) {
-    Console.print(printBridge.getBridgeData());
+    const bridgeData = printBridge.getBridgeData();
+    Console.print(bridgeData);
   },
 
   /** @param {BridgeGame} bridgeGameInstance */
   printResult(bridgeGameInstance) {
-    Console.print('최종 게임 결과');
-
+    Console.print(OUTPUT_MESSAGE.GAME_RESULT.INTRO);
     OutputView.printMap(bridgeGameInstance);
 
     const isClear = bridgeGameInstance.clear();
-    Console.print(`게임 성공 여부: ${isClear ? '성공' : '실패'}`);
+    const clearMark = isClear
+      ? SYMBOL.GAME_RESULT.CLEAR
+      : SYMBOL.GAME_RESULT.FAIL;
+    const clearMessage = replaceParams(
+      OUTPUT_MESSAGE.GAME_RESULT.CLEAR,
+      clearMark
+    );
+    Console.print(clearMessage);
 
-    const attempCount = bridgeGameInstance.getAttemptCount();
-    Console.print(`총 시도한 횟수: ${attempCount}`);
+    const attemptCount = bridgeGameInstance.getAttemptCount();
+    const attemptMessage = replaceParams(
+      OUTPUT_MESSAGE.GAME_RESULT.ATTEMPT,
+      attemptCount
+    );
+    Console.print(attemptMessage);
   },
 
   /** @param {Error} errorObject */
   printError(errorObject) {
-    Console.print(`[ERROR] ${errorObject.message}`);
-    OutputView.addNewLine();
+    Console.print(VALIDATOR.ERROR_MESSAGE.HEADING + errorObject.message);
+    this.addNewLine();
   },
 
   addNewLine() {
-    Console.print('');
+    Console.print(OUTPUT_MESSAGE.NULL);
   },
 };
 
