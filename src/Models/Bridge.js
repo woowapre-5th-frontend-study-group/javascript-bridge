@@ -2,20 +2,31 @@ class Bridge {
   /** @type {string[]} */
   #bridgeData = null;
 
+  /** @param {string[]} bridgeData */
   constructor(bridgeData) {
     if (bridgeData !== null) {
       this.setBridgeData(bridgeData);
     }
   }
 
+  /** @param {string[]} bridgeData */
   setBridgeData(bridgeData) {
     this.#bridgeData = bridgeData;
   }
 
+  /** @returns {string[]} */
   getBridgeData() {
     return this.#bridgeData;
   }
 
+  /** @returns {{ moving: string, fail: boolean}} */
+  getBridgeObject() {
+    return this.#bridgeData.map((moving) => {
+      return { moving, fail: false };
+    });
+  }
+
+  /** @param  {...string} movings */
   pushMoving(...movings) {
     if (!this.#bridgeData) {
       this.#bridgeData = [];
@@ -30,7 +41,7 @@ class Bridge {
    * 각 다리의 마지막 Moving을 비교한다.
    *
    * @param {*} comparedBridge
-   * @return {{isClear: boolean, canNext: boolean, failMoving: string}}
+   * @return {{isClear: boolean, isRetry: boolean}}
    */
   compareBridge(comparedBridge) {
     const comparedResult = {
@@ -59,11 +70,6 @@ class Bridge {
       ...comparedResult,
       isRetry: true,
     };
-  }
-
-  markWrongMoving() {
-    // TODO: 잘못된 Moving 체크하고 getComparedMap 완성하기
-    // this.#bridgeData.at(-1) =
   }
 }
 
