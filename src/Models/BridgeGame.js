@@ -1,64 +1,79 @@
+/** Models Imported */
 const Bridge = require('./Bridge');
 
+/** Utils Imported */
 const BridgeRandomNumberGenerator = require('../Utils/BridgeRandomNumberGenerator');
 const BridgeMaker = require('../Utils/BridgeMaker');
 
+/* #region Private Outer Referrence */
+/** @type {number} */
 let _attemptCount = 0;
+
+/** @type {number | null} */
 let _bridgeSize = null;
 
 /** @type {Bridge} */
 let _answerBridge = null;
+/* #endregion */
 
 class BridgeGame {
   /** @type {Bridge} */
   #userBridge = null;
 
-  /** @type {boolean} */
-  #isClear = false;
-
   constructor() {
     _attemptCount += 1;
   }
 
+  /** @param {number} bridgeSize */
   static setBridgeSize(bridgeSize) {
     _bridgeSize = bridgeSize;
   }
 
+  /** @returns {number} */
   getAttemptCount() {
     return _attemptCount;
   }
 
+  /** @returns {{ moving: string, fail: boolean }} */
   getComparedMap() {
-    const comparedResult = this.#userBridge.compareBridge(_answerBridge);
+    const { isRetry, isClear } = this.#userBridge.compareBridge(_answerBridge);
 
-    if (comparedResult.isRetry) {
+    if (isRetry) {
       // 맨 마지막 moving만 X로 체크
-      const userBridgeData = this.#userBridge.getBridgeData();
-      const movingData = userBridgeData.map((moving) => {
-        return { moving, fail: false };
-      });
+      const userBridgeData = this.#userBridge.getBridgeObject();
 
       return [
-        ...movingData.slice(0, -1),
-        { moving: movingData.slice(-1)[0].moving, fail: true },
+        ...userBridgeData.slice(0, -1),
+        { moving: userBridgeData.slice(-1)[0].moving, fail: true },
       ];
     }
 
-    if (comparedResult.isClear) {
-      // 정답 다리 데이터 출력
-      const answerBridgeData = _answerBridge.getBridgeData();
-      return answerBridgeData.map((moving) => {
-        return { moving, fail: false };
-      });
+    return isClear
+      ? _answerBridge.getBridgeObject() // 정답 다리 데이터 출력
+      : this.#userBridge.getBridgeObject(); // 현재 유저 데이터 출력
+  }
+
+  /** @param {string} moving */
+  move(moving) {
+    if (!this.#userBridge) {
+      this.#userBridge = new Bridge();
     }
 
-    // 현재 유저 데이터 출력
-    const userBridgeData = this.#userBridge.getBridgeData();
-    return userBridgeData.map((moving) => {
-      return { moving, fail: false };
-    });
+    this.#userBridge.pushMoving(moving);
+  }
 
-    // return _answerBridge;
+  /** @returns {boolean} */
+  clear() {
+    const { isClear } = this.#userBridge.compareBridge(_answerBridge);
+
+    return isClear;
+  }
+
+  /** @returns {boolean} */
+  retry() {
+    const { isRetry } = this.#userBridge.compareBridge(_answerBridge);
+
+    return isRetry;
   }
 
   static createAnswerBridge() {
@@ -71,27 +86,6 @@ class BridgeGame {
 
     // TODO: 콘솔 지우기
     console.log(bridgeData);
-  }
-
-  move(moving) {
-    if (!this.#userBridge) {
-      this.#userBridge = new Bridge();
-    }
-
-    this.#userBridge.pushMoving(moving);
-  }
-
-  clear() {
-    const { isClear } = this.#userBridge.compareBridge(_answerBridge);
-
-    return isClear;
-  }
-
-  /** retry를 해야하는지 아닌지? */
-  retry() {
-    const { isRetry } = this.#userBridge.compareBridge(_answerBridge);
-
-    return isRetry;
   }
 }
 
