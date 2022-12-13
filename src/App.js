@@ -1,14 +1,21 @@
-const { close } = require('./Views/');
-
+/** Controllers Imported */
 const {
   BridgeGameInitialController,
   BridgeGameController,
   BridgeGameResultController,
 } = require('./Controllers');
 
+/** Methods Imported */
+const { close } = require('./Views/');
+
 class App {
+  /** @type {BridgeGameInitialController} */
   #bridgeGameInitialController;
+
+  /** @type {BridgeGameController} */
   #bridgeGameController;
+
+  /** @type {BridgeGameResultController} */
   #bridgeGameResultController;
 
   constructor() {

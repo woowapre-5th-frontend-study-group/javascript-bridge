@@ -1,7 +1,10 @@
+/** Models Imported */
 const BridgeGame = require('../Models/BridgeGame');
 
+/** Views Imported */
 const { OutputView } = require('../Views');
 
+/** Controller Imported */
 const BasicController = require('./BasicController');
 
 class BridgeGameResultController extends BasicController {
@@ -12,6 +15,7 @@ class BridgeGameResultController extends BasicController {
     super();
   }
 
+  /** @param {BridgeGame} bridgeGameInstance */
   start(bridgeGameInstance) {
     this.#bridgeGameInstance = bridgeGameInstance;
     this.#printGameFinalResult();

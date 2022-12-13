@@ -11,6 +11,11 @@ const BasicController = require('./BasicController');
 const QuestionHandler = require('../Utils/QuestionHandler');
 
 /* #region  Private Functions */
+/**
+ * @param {boolean} checkResult
+ * @param {function} callback
+ * @returns {{checkResult: boolean, callback: function}}
+ */
 function makeCheckCondition(checkResult, callback) {
   return { checkResult, callback };
 }
@@ -37,6 +42,7 @@ class BridgeGameController extends BasicController {
     );
   }
 
+  /** @param {string} moving */
   #questionMovingCallback(moving) {
     this.#bridgeGameInstance.move(moving);
     OutputView.printMap(this.#bridgeGameInstance);
@@ -67,6 +73,7 @@ class BridgeGameController extends BasicController {
     );
   }
 
+  /** @param {string} gameCommand */
   #questionGameCommandCallback(gameCommand) {
     if (gameCommand === 'R') {
       this.start();
