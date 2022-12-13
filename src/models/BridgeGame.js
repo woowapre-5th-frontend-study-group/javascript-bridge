@@ -1,6 +1,6 @@
-const { BRIDGE } = require('../libs/Constant');
 const errorHandler = require('../libs/errorHandler');
 const { MovingValidator, GameCommandValidator } = require('../libs/Validator');
+const { BRIDGE } = require('../libs/Constant');
 
 /**
  * 다리 건너기 게임을 관리하는 클래스
@@ -15,7 +15,7 @@ class BridgeGame {
    * 이동을 위해 필요한 메서드의 반환 값(return value), 인자(parameter)는 자유롭게 추가하거나 변경할 수 있다.
    */
   move(location, comapreLocation) {
-    const moveResult = location === comapreLocation ? 'O' : 'X';
+    const moveResult = location === comapreLocation ? BRIDGE.pass : BRIDGE.fail;
     this.#bridgeState.push([location, moveResult]);
   }
 
@@ -32,11 +32,11 @@ class BridgeGame {
     this.#bridgeState.forEach(([location, result]) => {
       if (location === BRIDGE.up) {
         upBridge.push(result);
-        downBridge.push(' ');
+        downBridge.push(BRIDGE.blank);
         return;
       }
 
-      upBridge.push(' ');
+      upBridge.push(BRIDGE.blank);
       downBridge.push(result);
     });
   }

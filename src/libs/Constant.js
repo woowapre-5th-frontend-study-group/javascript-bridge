@@ -3,6 +3,7 @@ const BRIDGE = {
   down: 'D',
   pass: 'O',
   fail: 'X',
+  blank: ' ',
 };
 
 const GAME_COMMAND = {
