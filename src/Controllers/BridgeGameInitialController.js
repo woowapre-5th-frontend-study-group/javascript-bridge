@@ -14,25 +14,25 @@ class BridgeGameInitialController extends BasicController {
 
   start() {
     OutputView.printWelcomeMessage();
-    this.questionBridgeSize();
+    this.#questionBridgeSize();
   }
 
-  questionBridgeSize() {
+  #questionBridgeSize() {
     const { BRIDGE_SIZE } = QuestionHandler.QUESTION_TYPE;
 
     new QuestionHandler(BRIDGE_SIZE).question((bridgeSize) =>
-      this.questionBridgeSizeCallback(bridgeSize)
+      this.#questionBridgeSizeCallback(bridgeSize)
     );
   }
 
-  questionBridgeSizeCallback(bridgeSize) {
+  #questionBridgeSizeCallback(bridgeSize) {
     const convertedBridgeSize = convertToNumber(bridgeSize);
     BridgeGame.setBridgeSize(convertedBridgeSize);
 
-    this.createAnswerBridge(convertedBridgeSize);
+    this.#createAnswerBridge(convertedBridgeSize);
   }
 
-  createAnswerBridge(bridgeSize) {
+  #createAnswerBridge(bridgeSize) {
     BridgeGame.createAnswerBridge(bridgeSize);
     super.end();
   }

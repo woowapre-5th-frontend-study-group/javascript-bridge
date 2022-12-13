@@ -26,28 +26,28 @@ class BridgeGameController extends BasicController {
 
   start() {
     this.#bridgeGameInstance = new BridgeGame();
-    this.questionMoving();
+    this.#questionMoving();
   }
 
-  questionMoving() {
+  #questionMoving() {
     const { MOVING } = QuestionHandler.QUESTION_TYPE;
 
     new QuestionHandler(MOVING).question((moving) =>
-      this.questionMovingCallback(moving)
+      this.#questionMovingCallback(moving)
     );
   }
 
-  questionMovingCallback(moving) {
+  #questionMovingCallback(moving) {
     this.#bridgeGameInstance.move(moving);
     OutputView.printMap(this.#bridgeGameInstance);
 
-    this.continueByEachCondition();
+    this.#continueByEachCondition();
   }
 
-  continueByEachCondition() {
+  #continueByEachCondition() {
     const conditionList = [
-      makeCheckCondition(this.#bridgeGameInstance.clear(), () => this.end(this.#bridgeGameInstance)), // prettier-ignore
-      makeCheckCondition(this.#bridgeGameInstance.retry(), () => this.questionGameCommand()), // prettier-ignore
+      makeCheckCondition(this.#bridgeGameInstance.clear(), () => super.end(this.#bridgeGameInstance)), // prettier-ignore
+      makeCheckCondition(this.#bridgeGameInstance.retry(), () => this.#questionGameCommand()), // prettier-ignore
     ];
 
     const conditionResult = conditionList.filter(({ checkResult }) => checkResult); // prettier-ignore
@@ -56,18 +56,18 @@ class BridgeGameController extends BasicController {
       return;
     }
 
-    this.questionMoving();
+    this.#questionMoving();
   }
 
-  questionGameCommand() {
+  #questionGameCommand() {
     const { GAME_COMMAND } = QuestionHandler.QUESTION_TYPE;
 
     new QuestionHandler(GAME_COMMAND).question((gameCommand) =>
-      this.questionGameCommandCallback(gameCommand)
+      this.#questionGameCommandCallback(gameCommand)
     );
   }
 
-  questionGameCommandCallback(gameCommand) {
+  #questionGameCommandCallback(gameCommand) {
     if (gameCommand === 'R') {
       this.start();
       return;

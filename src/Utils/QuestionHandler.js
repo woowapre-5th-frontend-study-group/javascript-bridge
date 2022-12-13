@@ -16,11 +16,11 @@ class QuestionHandler {
 
   question(resultCallback) {
     InputView[`read${this.#questionType}`]((value) => {
-      this.validateCallback(value, resultCallback);
+      this.#validateCallback(value, resultCallback);
     });
   }
 
-  validateCallback(validateValue, resultCallback) {
+  #validateCallback(validateValue, resultCallback) {
     OutputView.addNewLine();
 
     const validateResult = ExceptionHandler[`tryValidate${this.#questionType}`](validateValue); // prettier-ignore

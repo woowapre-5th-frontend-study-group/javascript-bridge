@@ -14,12 +14,12 @@ class BridgeGameResultController extends BasicController {
 
   start(bridgeGameInstance) {
     this.#bridgeGameInstance = bridgeGameInstance;
-    this.printGameFinalResult();
+    this.#printGameFinalResult();
   }
 
-  printGameFinalResult() {
+  #printGameFinalResult() {
     OutputView.printResult(this.#bridgeGameInstance);
-    this.end();
+    super.end();
   }
 }
 
