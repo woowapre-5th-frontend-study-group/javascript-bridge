@@ -12,12 +12,12 @@ let _attemptCount = 0;
 /** @type {number | null} */
 let _bridgeSize = null;
 
-/** @type {Bridge} */
+/** @type {Bridge | null} */
 let _answerBridge = null;
 /* #endregion */
 
 class BridgeGame {
-  /** @type {Bridge} */
+  /** @type {Bridge | null} */
   #userBridge = null;
 
   constructor() {
