@@ -1,3 +1,5 @@
+const { BRIDGE } = require('./Constant');
+
 const MovingValidator = {
   MOVING_ERROR: '[ERROR] U 또는 D를 입력해주세요.',
 
@@ -6,7 +8,7 @@ const MovingValidator = {
   },
 
   isValidMoving(moving) {
-    if (moving === 'U' || moving === 'D') return;
+    if (moving === BRIDGE.up || moving === BRIDGE.down) return;
 
     throw new Error(this.MOVING_ERROR);
   },

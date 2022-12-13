@@ -1,3 +1,4 @@
+const { BRIDGE } = require('../libs/Constant');
 const errorHandler = require('../libs/errorHandler');
 const { MovingValidator, GameCommandValidator } = require('../libs/Validator');
 
@@ -29,7 +30,7 @@ class BridgeGame {
 
   #calMovingResult(upBridge, downBridge) {
     this.#bridgeState.forEach(([location, result]) => {
-      if (location === 'U') {
+      if (location === BRIDGE.up) {
         upBridge.push(result);
         downBridge.push(' ');
         return;
@@ -43,11 +44,11 @@ class BridgeGame {
   isSuccess(bridegSize) {
     if (bridegSize !== this.#bridgeState.length) return false;
 
-    return this.#calLastResult() === 'O' ? true : false;
+    return this.#calLastResult() === BRIDGE.pass ? true : false;
   }
 
   isFail() {
-    return this.#calLastResult() === 'X' ? true : false;
+    return this.#calLastResult() === BRIDGE.fail ? true : false;
   }
 
   #calLastResult() {

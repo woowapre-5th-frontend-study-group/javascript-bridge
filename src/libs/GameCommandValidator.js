@@ -1,3 +1,5 @@
+const { GAME_COMMAND } = require('./Constant');
+
 const GameCommandValidator = {
   GAME_COMMAND_ERROR: '[ERROR] R 또는 Q를 입력해주세요.',
 
@@ -6,7 +8,11 @@ const GameCommandValidator = {
   },
 
   isValidGameCommand(gameCommand) {
-    if (gameCommand === 'R' || gameCommand === 'Q') return;
+    if (
+      gameCommand === GAME_COMMAND.restart ||
+      gameCommand === GAME_COMMAND.quit
+    )
+      return;
 
     throw new Error(this.GAME_COMMAND_ERROR);
   },

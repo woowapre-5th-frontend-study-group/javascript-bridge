@@ -1,3 +1,4 @@
+const { GAME_COMMAND } = require('./libs/Constant');
 const Bridge = require('./models/Bridge');
 const BridgeGame = require('./models/BridgeGame');
 const IOView = require('./views/IOView');
@@ -69,7 +70,7 @@ class GameManager {
     const isValid = BridgeGame.validationGameCommand(gameCommand);
     if (!isValid) return this.requestGameCommand();
 
-    if (gameCommand === 'R') return this.retry();
+    if (gameCommand === GAME_COMMAND.restart) return this.retry();
     return this.end();
   }
 
