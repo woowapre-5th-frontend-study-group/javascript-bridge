@@ -1,5 +1,8 @@
-const { Console } = require('@woowacourse/mission-utils');
+/** Models Imported */
 const BridgeGame = require('../Models/BridgeGame');
+
+/** Utils Imported */
+const { Console } = require('@woowacourse/mission-utils');
 
 const OutputView = {
   printWelcomeMessage() {
@@ -7,10 +10,7 @@ const OutputView = {
     OutputView.addNewLine();
   },
 
-  /**
-   *
-   * @param {BridgeGame} bridgeGameInstance
-   */
+  /** @param {BridgeGame} bridgeGameInstance */
   printMap(bridgeGameInstance) {
     const bridgeData = bridgeGameInstance.getComparedMap();
     const [lowerMovings, upperMovings] = [[], []];
@@ -33,30 +33,25 @@ const OutputView = {
     OutputView.addNewLine();
   },
 
+  /** @param {Bridge} printBridge */
   printBridgeData(printBridge) {
     Console.print(printBridge.getBridgeData());
   },
 
-  /**
-   *
-   * @param {BridgeGame} bridgeGameInstance
-   */
+  /** @param {BridgeGame} bridgeGameInstance */
   printResult(bridgeGameInstance) {
     Console.print('최종 게임 결과');
 
     OutputView.printMap(bridgeGameInstance);
 
     const isClear = bridgeGameInstance.clear();
-    const attempCount = bridgeGameInstance.getAttemptCount();
-
     Console.print(`게임 성공 여부: ${isClear ? '성공' : '실패'}`);
+
+    const attempCount = bridgeGameInstance.getAttemptCount();
     Console.print(`총 시도한 횟수: ${attempCount}`);
   },
 
-  /**
-   *
-   * @param {Error} errorObject
-   */
+  /** @param {Error} errorObject */
   printError(errorObject) {
     Console.print(`[ERROR] ${errorObject.message}`);
     OutputView.addNewLine();
