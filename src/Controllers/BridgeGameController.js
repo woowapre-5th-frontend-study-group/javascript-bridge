@@ -2,13 +2,13 @@
 const BridgeGame = require('../Models/BridgeGame');
 
 /** Views Imported */
-const { InputView, OutputView } = require('../Views');
+const { OutputView } = require('../Views');
 
 /** Controllers Imported */
 const BasicController = require('./BasicController');
 
 /** Utils Imported */
-const ExceptionHandler = require('../Utils/ExceptionHandler');
+const QuestionHandler = require('../Utils/QuestionHandler');
 
 /* #region  Private Functions */
 function makeCheckCondition(checkResult, callback) {
@@ -30,16 +30,14 @@ class BridgeGameController extends BasicController {
   }
 
   questionMoving() {
-    InputView.readMoving((moving) => this.readMovingCallback(moving));
+    const { MOVING } = QuestionHandler.QUESTION_TYPE;
+
+    new QuestionHandler(MOVING).question((moving) =>
+      this.questionMovingCallback(moving)
+    );
   }
 
-  readMovingCallback(moving) {
-    const validateResult = ExceptionHandler.tryValidateMoving(moving);
-    if (!validateResult) {
-      this.questionMoving();
-      return;
-    }
-
+  questionMovingCallback(moving) {
     this.#bridgeGameInstance.move(moving);
     OutputView.printMap(this.#bridgeGameInstance);
 
@@ -62,18 +60,14 @@ class BridgeGameController extends BasicController {
   }
 
   questionGameCommand() {
-    InputView.readGameCommand((gameCommand) => this.readGameCommandCallback(gameCommand)); // prettier-ignore
+    const { GAME_COMMAND } = QuestionHandler.QUESTION_TYPE;
+
+    new QuestionHandler(GAME_COMMAND).question((gameCommand) =>
+      this.questionGameCommandCallback(gameCommand)
+    );
   }
 
-  readGameCommandCallback(gameCommand) {
-    OutputView.addNewLine();
-
-    const validateResult = ExceptionHandler.tryValidateGameCommand(gameCommand);
-    if (!validateResult) {
-      this.questionGameCommand();
-      return;
-    }
-
+  questionGameCommandCallback(gameCommand) {
     if (gameCommand === 'R') {
       this.start();
       return;

@@ -1,11 +1,12 @@
 const BridgeGame = require('../Models/BridgeGame');
 
-const { InputView, OutputView } = require('../Views');
+const { OutputView } = require('../Views');
 
 const BasicController = require('./BasicController');
 
-const ExceptionHandler = require('../Utils/ExceptionHandler');
+const QuestionHandler = require('../Utils/QuestionHandler');
 const { convertToNumber } = require('../Utils/Helper');
+
 class BridgeGameInitialController extends BasicController {
   constructor() {
     super();
@@ -17,18 +18,14 @@ class BridgeGameInitialController extends BasicController {
   }
 
   questionBridgeSize() {
-    InputView.readBridgeSize((bridgeSize) => this.readBridgeSizeCallback(bridgeSize)); // prettier-ignore
+    const { BRIDGE_SIZE } = QuestionHandler.QUESTION_TYPE;
+
+    new QuestionHandler(BRIDGE_SIZE).question((bridgeSize) =>
+      this.questionBridgeSizeCallback(bridgeSize)
+    );
   }
 
-  readBridgeSizeCallback(bridgeSize) {
-    OutputView.addNewLine();
-
-    const validateResult = ExceptionHandler.tryValidateBridgeSize(bridgeSize);
-    if (!validateResult) {
-      this.questionBridgeSize();
-      return;
-    }
-
+  questionBridgeSizeCallback(bridgeSize) {
     const convertedBridgeSize = convertToNumber(bridgeSize);
     BridgeGame.setBridgeSize(convertedBridgeSize);
 
@@ -37,7 +34,7 @@ class BridgeGameInitialController extends BasicController {
 
   createAnswerBridge(bridgeSize) {
     BridgeGame.createAnswerBridge(bridgeSize);
-    this.end();
+    super.end();
   }
 }
 
